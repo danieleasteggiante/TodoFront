@@ -2,10 +2,17 @@ import React from 'react';
 import './App.css';
 import Todo from "./Components/Todo";
 import Task from "./Model/ITask";
+import Constant from "./Constant/Constant";
 
 function App() {
     const [tasks, setTasks] = React.useState<Task[]>([]); // [tasks, setTasks
     let enteredTask  =  React.useRef<HTMLInputElement>(null);
+    const userId = 1;
+    React.useEffect(() => {
+        fetch(Constant.API_URL + Constant.API_READ_TASKS)
+            .then(response => response.json())
+            .then(json => setTasks(json));  // setTasks
+    }, [])
 
     function buildTodo(value: string, id?:number) : Task {
         return {
@@ -25,6 +32,24 @@ function App() {
                 setTasks([...tasks]);
                 return
             }
+            if (task.children.length > 0) {
+                task.children.forEach((child: Task, index: number) => {
+                    if (child.id === id) {
+                        task.children.splice(index, 1);
+                        setTasks([...tasks]);
+                        return
+                    }
+                    if (child.children.length > 0) {
+                        child.children.forEach((grandChild: Task, index: number) => {
+                            if (grandChild.id === id) {
+                                child.children.splice(index, 1);
+                                setTasks([...tasks]);
+                                return
+                            }
+                        });
+                    }
+                });
+            }
         });
     }
 
@@ -34,6 +59,17 @@ function App() {
                 task.description = value;
                 task.updatedAt = new Date();
                 setTasks([...tasks]);
+                return;
+            }
+            if (task.children.length > 0) {
+                task.children.forEach((child: Task) => {
+                    if (child.id === id) {
+                        child.description = value;
+                        child.updatedAt = new Date();
+                        setTasks([...tasks]);
+                        return;
+                    }
+                });
             }
         });
 

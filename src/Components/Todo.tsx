@@ -28,11 +28,18 @@ function Todo(props: TodoProps) {
         {React.createElement('h' + (generazioneTodo+2), {}, props.task.description)}
         <div className="todo-buttons" style={{marginLeft: props.generazione * 100}}>
             <button className="todo-edit">Edit</button>
-            <button onClick={()=>props.removeTodo(props.task.id)} className="todo-delete">Delete</button>
-            <input  ref={enteredTask} />
-            <button onClick={()=>handleClick(props.task.id,enteredTask)} className="todo-add">Add</button>
-        </div>
-        <div>
+            <button onClick={() => props.removeTodo(props.task.id)} className="todo-delete">Delete</button>
+
+            {props.generazione < 2 &&
+                <><input ref={enteredTask}/>
+                    <button onClick={() => handleClick(props.task.id, enteredTask)}
+                            className="todo-add">Add
+                    </button>
+                </>
+        }
+
+    </div>
+    <div>
             {props.task.children && props.task.children.map(
                 (t: Task, index: number) => (
                     <Todo
