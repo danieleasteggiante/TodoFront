@@ -8,11 +8,12 @@ function App() {
     const [tasks, setTasks] = React.useState<Task[]>([]); // [tasks, setTasks
     let enteredTask  =  React.useRef<HTMLInputElement>(null);
     const userId = 1;
-    React.useEffect(() => {
-        fetch(Constant.API_URL + Constant.API_READ_TASKS)
+
+   React.useEffect(() => {
+        fetch(Constant.API_URL + Constant.API_READ_TASKS + Constant.API_USER + `/${userId}`)
             .then(response => response.json())
-            .then(json => setTasks(json));  // setTasks
-    }, [])
+            .then(json => setTasks(json));
+        }, [])
 
     function buildTodo(value: string, id?:number) : Task {
         return {
@@ -91,7 +92,6 @@ function App() {
                 });
             }
         });
-        console.log(tasks);
     }
 
     function handleClick(event : React.MouseEvent<HTMLButtonElement, MouseEvent>) {
