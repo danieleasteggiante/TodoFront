@@ -1,9 +1,15 @@
 import React from 'react';
-interface LoginProps{
 
+function Login(){
+    return (
+        <div>
+            <h1>Login</h1>
+            <form>
+                <input type="text" placeholder="Username"/>
+                <input type="password" placeholder="Password"/>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    )
 }
-function Login(props: LoginProps){
-
-}
-
 export default Login;
